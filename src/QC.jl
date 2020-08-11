@@ -16,18 +16,18 @@ function QC(from, to; geno = 0.1, maf = 0.01, hwe = 0.0001, mind = 0.1)
     title("Quality control of genotype set $from")
     item("Parameter check")
     if !isfile(from * ".bed")
-        warning("!!! Warning: $from files don't exist")
+        warning("$from files don't exist")
         return
     end
     pathto, target = splitdir(to)
     if length(pathto) == 0
-        warning("!!! Warning: target file in current folder")
+        warning("Target file is in the current folder")
     else
         isdir(pathto) || mkdir(pathto)
     end
 
     item("Filter ID and SNP")
-    _ = read(`plink  --sheep
+    _ = read(`$plink  --sheep
 			--bfile $from
 			--geno $geno
 			--maf $maf
@@ -52,7 +52,7 @@ function QC(from, to; geno = 0.1, maf = 0.01, hwe = 0.0001, mind = 0.1)
     if length(diff) > 0
         println(join(diff, ' '))
         msg = "Above " * string(length(diff)) * " SNP were removed"
-        warning("!!! Warning: $msg")
+        warning(msg)
     else
         message("No SNP were removed")
     end
@@ -61,7 +61,7 @@ function QC(from, to; geno = 0.1, maf = 0.01, hwe = 0.0001, mind = 0.1)
     if length(diff) > 0
         println(join(diff, ' '))
         msg = "Above " * string(length(diff)) * " ID were removed"
-        warning("!!! Warning: $msg")
+        warning(msg)
     else
         message("No ID were removed")
     end

@@ -9,6 +9,8 @@ The functions include:
 2. Data QC to filter out low quality ID and/or loci
 3. Imputation of sparser platforms to denser ones.
 4. Calculation of a **G** matrix with imputed genotypes
+
+This package was written only for Linux OS
 """
 module NSG
 
@@ -18,6 +20,9 @@ bin_dir, cpp_dir = begin
     l = findlast('/', t) - 1
     joinpath(t[1:l], "bin"), joinpath(t[1:l], "src")
 end
+beagle = joinpath(bin_dir, "beagle.jar")
+plink = joinpath(bin_dir, "plink")
+nsne = 100
 
 include("styled-messages.jl")
 include("update.jl")

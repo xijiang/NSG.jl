@@ -45,31 +45,31 @@ function make_bed(dir, lmap, sid, nf, target)
     title("Merge files in $dir into $target.bed")
     item("Check parameters")
     if !isdir(dir)
-        warning("!!!WARNING: $dir doesn't exist")
+        warning("$dir doesn't exist")
         return
     end
 
     dir = abspath(dir)
     files = readdir(dir, join=true)
     if length(files) == 0
-        warning("!!!WARNING: No file in $dir")
+        warning("No file in $dir")
     end
     
     if !isfile(lmap)
-        warning("!!!WARNING: map $lmap doesn't exist")
+        warning("Map $lmap doesn't exist")
         return
     end
     lmap = abspath(lmap)
 
     if !isfile(sid)
-        warning("!!!WARNING: ID description $sid doesn't exist")
+        warning("ID description $sid doesn't exist")
         return
     end
 
     target =  begin
         pt, target = splitdir(target)
         if length(pt) == 0
-            warning("!!!WARNING: you are saving the bed files in the current dir")
+            warning("You are saving the bed files in the current dir")
             pt = pwd()
         else
             pt = abspath(pt)
@@ -116,7 +116,7 @@ function make_bed(dir, lmap, sid, nf, target)
     done()
 
     item("Make $target.bed")
-    _ = read(run(`plink --sheep --vcf ori.vcf --const-fid --out $target`), String)
+    _ = read(run(`$plink --sheep --vcf ori.vcf --const-fid --out $target`), String)
     cd("..")
     rm(tmp, recursive=true, force=true)
     done()

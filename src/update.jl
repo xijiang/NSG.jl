@@ -104,8 +104,6 @@ function Update(force = false)
     message(msg)
     
     isdir(bin_dir) || mkdir(bin_dir)
-    beagle = joinpath(bin_dir, "beagle.jar")
-    plink = joinpath(bin_dir, "plink")
     if Dates.day(now()) == 17 || force
         rm(beagle, force=true)
         rm(plink,  force=true)

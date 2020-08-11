@@ -28,6 +28,7 @@ end
 Print a warning.
 """
 function warning(msg::AbstractString)
+    msg = "!!! Warning: " * msg
     printstyled('\n', msg, '\n'; color=229)
 end
 
