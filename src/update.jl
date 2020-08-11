@@ -73,12 +73,12 @@ end
 Compile Xijiang's C++ codes into binaries.
 """
 function make_bins()
-    bins = ["mrg2bgl"]
+    bins = ["mrg2bgl", "raw2gt"]
     for b in bins
         if !isfile(joinpath(bin_dir, b))
             print(lpad("g++ -O3 -Wall -std=c++17 $b.cpp -o $b", 60))
             run(`g++ -O3 -Wall -std=c++17 -o $bin_dir/$b $cpp_dir/$b.cpp`)
-            done()
+            done("Compiled")
         end
     end
 end
@@ -119,12 +119,18 @@ function Update(force = false)
     if !isfile(joinpath(bin_dir, beagle2vcf))
         message("\tDownloading beagle2vcf.jar")
         download(joinpath(beagle2vcfURL, beagle2vcf), joinpath(bin_dir, beagle2vcf))
+        done("Newly downloaded")
+    else
+        done("Exists")
     end
-    done()
     
     item("plink")
-    isfile(plink) || update_plink()
-    done()
+    if isfile(plink)
+        done("Exists")
+    else
+        update_plink()
+        done("Newly downloaded")
+    end
     
     item("C++ binaries")
     make_bins()

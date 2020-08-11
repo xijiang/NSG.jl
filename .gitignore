@@ -25,3 +25,4 @@ Manifest.toml
 bin/
 dat/
 tmp/
+doc/.ipynb_checkpoints/

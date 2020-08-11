@@ -24,8 +24,12 @@ function make_ref(src, ref)
     item("Create reference")
     tmp = mktempdir(".")
     run(`$plink --sheep --bfile $src --recode vcf-iid bgz --out $tmp/mid`)
-    run(`java -jar $beagle gt=$tmp/mid.vcf.gz ne=$nsne out=$ref`)
+    run(`java -jar $beagle gt=$tmp/mid.vcf.gz ne=$nsNe out=$ref`)
     rm(tmp, recursive=true, force=true)
+    done()
+
+    item("Convert to plink format")
+    run(`$plink --sheep --make-bed --vcf $ref.vcf.gz --out $ref`)
     done()
 end
 
@@ -45,6 +49,10 @@ function impute(cur, ref, out)
         warning("$cur.bed doesn't exist")
         return
     end
+    if !isfile("$ref.vcf.gz")
+        warning("Reference $ref.vcf.gz is not ready")
+        return
+    end
     pathto, target = splitdir(out)
     if(length(pathto) == 0)
         warning("Creating target in the current directory")
@@ -53,27 +61,30 @@ function impute(cur, ref, out)
     end
     done()
 
-    item("Imputeing $cur")
+    item("Prepare $cur and remove extra SNP in $cur")
     tmp = mktempdir(".")
-    run(`$plink --sheep --bfile $cur --recode vcf-iid bgz --out $tmp/mid`)
-    run(`java -jar $beagle ne=nsne ref=$ref gt=$tmp/mid/mid.vcf.gz out=$out`)
-    rm(tmp, recursive=true, force=true)
-    done()
-end
-
-
-"""
-    combine(target, src...)
----
-This funciton utilizes Julia splatting.  You can put as many datasets as you have to
-feed the funciton.  The first argument `target` will be the target to merge into.
-The rest `src` will serve as sources.  They should have the same number of SNP.
-
-The `impute` function guarantees the newly imputed dataset has the same number of SNP
-as the ref.
-"""
-function combine(target, src...)
-    for i in src
-        println(i)
+    snpset(file) = begin
+        snp = String[]
+        for line in eachline(file)
+            s = split(line)[2]
+            push!(snp, s)
+        end
+        Set(snp)
     end
+    refsnp = snpset("$ref.bim")
+    cursnp = snpset("$cur.bim")
+    exclude = setdiff(cursnp, refsnp)
+    write("$tmp/exclude.snp", join(exclude, '\n'), '\n')
+    run(`$plink --sheep --bfile $cur --exclude $tmp/exclude.snp --recode vcf-iid bgz --out $tmp/mid`)
+    done()
+
+    item("Impute $cur with $ref")
+    run(`java -jar $beagle ne=$nsNe ref=$ref.vcf.gz gt=$tmp/mid.vcf.gz out=$out`)
+    done()
+
+    item("Convert result to plink format")
+    run(`$plink --sheep --make-bed --vcf $out.vcf.gz --out $out`)
+    done()
+    
+    rm(tmp, recursive=true, force=true)
 end

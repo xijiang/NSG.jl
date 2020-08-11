@@ -22,11 +22,13 @@ bin_dir, cpp_dir = begin
 end
 beagle = joinpath(bin_dir, "beagle.jar")
 plink = joinpath(bin_dir, "plink")
-nsne = 100
+nsNe = 100
+_nthreads = 8
 
 include("styled-messages.jl")
 include("update.jl")
 include("raw.jl")
+include("misc.jl")
 include("QC.jl")
 include("imputation.jl")
 include("gmatrix.jl")
