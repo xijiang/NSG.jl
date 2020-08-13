@@ -40,7 +40,6 @@ function read_gt_n_frq(gt, frq)
         end
     end
     close(fgt)
-    done()
     return p, twop, z
 end
 
