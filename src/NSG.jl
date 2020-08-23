@@ -22,8 +22,10 @@ bin_dir, cpp_dir = begin
 end
 beagle = joinpath(bin_dir, "beagle.jar")
 plink = joinpath(bin_dir, "plink")
-nsNe = 100
-_nthreads = 8
+global nsNe = 100
+set_ne(ne) = (global nsNe=ne)
+global _nthreads = 8
+set_nthreads(n) = (global _nthreads=n)
 
 include("styled-messages.jl")
 include("update.jl")

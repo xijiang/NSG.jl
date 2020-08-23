@@ -225,13 +225,13 @@ You can do similar on the **G** computation procedure.
 ### Speed up G calculation
 This package use 8 threads by default to calculate **G**. If your computer has more threads availabe, e.g., 12, run:
 ```julia
-NSG._nthreads = 12
+NSG.set_nthreads(12)
 ```
 before calling `NSG.compute_G`.
 ### $N_e$
 Currently the $N_e$ for imputation is set as 100. You can change it to, say, 120:
 ```julia
-NSG.nsNe = 120
+NSG.set_ne(120)
 ```
 before the imputation procedure.
 ### Other issues
