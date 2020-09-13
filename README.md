@@ -47,6 +47,15 @@ When you want to check if new `plink` or `beagle.jar` is available:
 NSG.Update(true)
 ```
 
+### To update `NSG`
+
+Start the `julia` REPL first. Then run:
+
+```julia
+]
+update NSG
+```
+
 ## Data organization
 Suppose your data folder structer is as below:
 
