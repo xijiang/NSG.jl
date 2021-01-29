@@ -246,6 +246,14 @@ NSG.compute_G("G/result.G", "ref/a17k", "new/c17k", add_diag=0.)
 ```
 Above function will merge dataset `ref/a17k`, `new/c17k` and then calculate a **G** matrix into `G/result.G`. This is a 3-column file which can be used in `dmu`. No value, by default, is added to the diagonals. You can specify one by letting `add_diag=1e-6`, for example.
 
+## Output genotypes
+This is to output packed genotypes and ID names.
+```julia
+NSG.output_gt("target", "ref/a17k", "new/c17k")
+```
+This function will write `target.id` and `target.gt` in the current directory.
+You can also specify some other directory to store.
+
 ## Appendices
 
 ### Automation of above procedure

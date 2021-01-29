@@ -73,7 +73,7 @@ end
 
 
 """
-    compute_G(target, src...)
+    compute_G(target, src...; add_diag=0.)
 ---
 Given the `plink` file sets `src`.{bed,bim,fam}, this function calculate a **G**
 matrix in 3 columns, i.e.,
@@ -82,8 +82,9 @@ matrix in 3 columns, i.e.,
 
 and store the elements in `target`
 
-This funciton utilizes Julia splatting.  You can input as many datasets as you have to
-feed the funciton.
+This funciton utilizes Julia splatting.  You can input as many datasets as you have to feed the funciton.
+
+If the inverse of **G** is weird or not possible, try a tiny `add_diag` to the diagonals.
 """
 function compute_G(target, src...; add_diag=0.)
     title("Compute G with $src")
