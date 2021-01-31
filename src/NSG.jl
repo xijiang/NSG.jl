@@ -34,6 +34,7 @@ include("misc.jl")
 include("QC.jl")
 include("imputation.jl")
 include("gmatrix.jl")
+include("genotypes.jl")
 
 NSG.title("Updating binaries")
 NSG.Update()
