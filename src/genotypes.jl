@@ -45,17 +45,25 @@ function output_gt(target, src...)
     end
     run(`$plink --sheep --bfile $tmp/plink --recode A --out $tmp/plink`)
     open("$tmp/plink.raw", "r") do io
-        open("$target.id", "w") do id
-            line = readline(io)
-            println(id, join(split(line)[7:end], "\n"))
+        _  = readline(io)       # skip the line of SNP names
+        fid = open("$target.id", "w")
+        nid = 0
+        buffer = IOBuffer()
+        for line in eachline(io)
+            nid += 1
+            t = findnext(' ', line, 1) - 1
+            println(fid, line[1:t])
+            t += 2
+            for _ in 2:6
+                t = findnext(' ', line, t) + 1
+            end
+            write(buffer, replace(line[t:end], ' '=>""))
         end
+        close(fid)
         open("$target.gt", "w") do gt
-            for line in eachline(io)
-                t = 1
-                for _ in 1:6
-                    t = findnext(' ', line, t) + 1
-                end
-                println(gt, replace(line[t:end], ' '=>""))
+            GT = reshape(take!(buffer), nid, :)
+            for i in 1:size(GT)[2]
+                println(gt, String(GT[:, i]))
             end
         end
     end
