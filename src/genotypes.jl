@@ -62,8 +62,8 @@ function output_gt(target, src...)
         close(fid)
         open("$target.gt", "w") do gt
             GT = reshape(take!(buffer), nid, :)
-            for i in 1:size(GT)[2]
-                println(gt, String(GT[:, i]))
+            for i in 1:size(GT)[1]
+                println(gt, String(GT[i, :]))
             end
         end
     end
