@@ -1,4 +1,4 @@
-using LinearAlgebra
+using LinearAlgebra, Statistics
 """
     function read_gt_n_frq(gt::AbstractString, frq::AbstractString)
 ---
@@ -45,7 +45,7 @@ end
 
 
 """
-    vanRaden(Z::Array{Float64, 2}, twop)
+    vanRaden(Z, twop)
 ---
 This function calculate **`G`** with van Raden 2008 on genotype **`Z`**.
 method I.  Note **`Z`** here is ID column majored.
@@ -141,6 +141,34 @@ function compute_G(target, src...; add_diag=0.)
         end
     end
     done()
-    
+
+    println(twop[1:20])
     rm(tmp, recursive=true, force=true)
+end
+
+
+"""
+    compute_G(file)
+---
+Compute GRM with 'packed format', that is, genotypes is stored like
+
+    012...
+    210...
+
+One row for an ID.
+
+This function is for test purpose only.
+It returns a GRM matrix of VR-I method.
+"""
+function compute_G(file)
+    Z = Int8[]
+    nid = 0
+    for line in eachline(file)
+        append!(Z, parse.(Int8, collect(line)))
+        nid += 1
+    end
+    Z = Float64.(Z)
+    Z = reshape(Z, :, nid)
+    twop = mean(Z, dims=2)
+    G = vanRaden(Z, vec(twop))
 end
