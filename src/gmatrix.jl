@@ -142,7 +142,6 @@ function compute_G(target, src...; add_diag=0.)
     end
     done()
 
-    println(twop[1:20])
     rm(tmp, recursive=true, force=true)
 end
 

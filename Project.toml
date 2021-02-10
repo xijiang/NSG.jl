@@ -1,7 +1,7 @@
 name = "NSG"
 uuid = "6add85f9-e9a4-4601-9125-7683495979ce"
 authors = ["Xijiang Yu <xijiang@users.noreply.github.com>"]
-version = "0.2.0"
+version = "0.2.1"
 
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
